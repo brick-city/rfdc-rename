@@ -1,6 +1,6 @@
 {
-  "name": "rfdc-rename",
-  "version": "1.4.0",
+  "name": "@brick-city/rfdc-rename",
+  "version": "1.4.1",
   "description": "Really Fast Deep Clone, now with property renaming!",
   "main": "index.js",
   "exports": {
