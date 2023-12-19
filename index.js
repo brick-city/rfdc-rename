@@ -35,6 +35,9 @@ function rfdc (opts) {
   }
 
   function clone (o) {
+
+    const rename = opts.rename ?? ((key)=> key);
+
     if (typeof o !== 'object' || o === null) return o
     if (o instanceof Date) return new Date(o)
     if (Array.isArray(o)) return cloneArray(o, clone)
@@ -45,17 +48,17 @@ function rfdc (opts) {
       if (Object.hasOwnProperty.call(o, k) === false) continue
       var cur = o[k]
       if (typeof cur !== 'object' || cur === null) {
-        o2[k] = cur
+        o2[k2] = cur
       } else if (cur instanceof Date) {
-        o2[k] = new Date(cur)
+        o2[k2] = new Date(cur)
       } else if (cur instanceof Map) {
-        o2[k] = new Map(cloneArray(Array.from(cur), clone))
+        o2[k2] = new Map(cloneArray(Array.from(cur), clone))
       } else if (cur instanceof Set) {
-        o2[k] = new Set(cloneArray(Array.from(cur), clone))
+        o2[k2] = new Set(cloneArray(Array.from(cur), clone))
       } else if (ArrayBuffer.isView(cur)) {
-        o2[k] = copyBuffer(cur)
+        o2[k2] = copyBuffer(cur)
       } else {
-        o2[k] = clone(cur)
+        o2[k2] = clone(cur)
       }
     }
     return o2
@@ -69,19 +72,21 @@ function rfdc (opts) {
     if (o instanceof Set) return new Set(cloneArray(Array.from(o), cloneProto))
     var o2 = {}
     for (var k in o) {
+      var k2 = rename(k)
       var cur = o[k]
+
       if (typeof cur !== 'object' || cur === null) {
-        o2[k] = cur
+        o2[k2] = cur
       } else if (cur instanceof Date) {
-        o2[k] = new Date(cur)
+        o2[k2] = new Date(cur)
       } else if (cur instanceof Map) {
-        o2[k] = new Map(cloneArray(Array.from(cur), cloneProto))
+        o2[k2] = new Map(cloneArray(Array.from(cur), cloneProto))
       } else if (cur instanceof Set) {
-        o2[k] = new Set(cloneArray(Array.from(cur), cloneProto))
+        o2[k2] = new Set(cloneArray(Array.from(cur), cloneProto))
       } else if (ArrayBuffer.isView(cur)) {
-        o2[k] = copyBuffer(cur)
+        o2[k2] = copyBuffer(cur)
       } else {
-        o2[k] = cloneProto(cur)
+        o2[k2] = cloneProto(cur)
       }
     }
     return o2
@@ -99,6 +104,7 @@ function rfdcCircles (opts) {
     var a2 = new Array(keys.length)
     for (var i = 0; i < keys.length; i++) {
       var k = keys[i]
+      var k2 = rename(k)
       var cur = a[k]
       if (typeof cur !== 'object' || cur === null) {
         a2[k] = cur
@@ -129,23 +135,24 @@ function rfdcCircles (opts) {
     refsNew.push(o2)
     for (var k in o) {
       if (Object.hasOwnProperty.call(o, k) === false) continue
+      var k2 = rename(k)
       var cur = o[k]
       if (typeof cur !== 'object' || cur === null) {
-        o2[k] = cur
+        o2[k2] = cur
       } else if (cur instanceof Date) {
-        o2[k] = new Date(cur)
+        o2[k2] = new Date(cur)
       } else if (cur instanceof Map) {
-        o2[k] = new Map(cloneArray(Array.from(cur), clone))
+        o2[k2] = new Map(cloneArray(Array.from(cur), clone))
       } else if (cur instanceof Set) {
-        o2[k] = new Set(cloneArray(Array.from(cur), clone))
+        o2[k2] = new Set(cloneArray(Array.from(cur), clone))
       } else if (ArrayBuffer.isView(cur)) {
-        o2[k] = copyBuffer(cur)
+        o2[k2] = copyBuffer(cur)
       } else {
         var i = refs.indexOf(cur)
         if (i !== -1) {
-          o2[k] = refsNew[i]
+          o2[k2] = refsNew[i]
         } else {
-          o2[k] = clone(cur)
+          o2[k2] = clone(cur)
         }
       }
     }
@@ -164,23 +171,24 @@ function rfdcCircles (opts) {
     refs.push(o)
     refsNew.push(o2)
     for (var k in o) {
+      var k2 = rename(k)
       var cur = o[k]
       if (typeof cur !== 'object' || cur === null) {
-        o2[k] = cur
+        o2[k2] = cur
       } else if (cur instanceof Date) {
-        o2[k] = new Date(cur)
+        o2[k2] = new Date(cur)
       } else if (cur instanceof Map) {
-        o2[k] = new Map(cloneArray(Array.from(cur), cloneProto))
+        o2[k2] = new Map(cloneArray(Array.from(cur), cloneProto))
       } else if (cur instanceof Set) {
-        o2[k] = new Set(cloneArray(Array.from(cur), cloneProto))
+        o2[k2] = new Set(cloneArray(Array.from(cur), cloneProto))
       } else if (ArrayBuffer.isView(cur)) {
-        o2[k] = copyBuffer(cur)
+        o2[k2] = copyBuffer(cur)
       } else {
         var i = refs.indexOf(cur)
         if (i !== -1) {
-          o2[k] = refsNew[i]
+          o2[k2] = refsNew[i]
         } else {
-          o2[k] = cloneProto(cur)
+          o2[k2] = cloneProto(cur)
         }
       }
     }
