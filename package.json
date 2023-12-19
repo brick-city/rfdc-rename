@@ -1,6 +1,6 @@
 {
   "name": "rfdc-rename",
-  "version": "1.4.1",
+  "version": "1.4.0",
   "description": "Really Fast Deep Clone, now with property renaming!",
   "main": "index.js",
   "exports": {
