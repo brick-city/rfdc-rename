@@ -17,7 +17,7 @@ clone({a: 1, b: {c: 2}}) // => {a: 1, b: {c: 2}}
 
 ## API
 
-### `require('rfdc')(opts = { proto: false, circles: false }) => clone(obj) => obj2`
+### `require('rfdc')(opts = { proto: false, circles: false, rename:(x)=>x }) => clone(obj) => obj2`
 
 #### `proto` option
 
@@ -47,6 +47,10 @@ Use the `circles` option to detect and preserve circular references in the
 object. If performance is important, try removing the circular reference from
 the object (set to `undefined`) and then add it back manually after cloning
 instead of using this option.
+
+#### `rename` option
+The current property name will be passed to this function, the value returned from this
+function will be used as a new name for the property on the object.
 
 ### `default` import
 It is also possible to directly import the clone function with all options set

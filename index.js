@@ -12,6 +12,8 @@ function copyBuffer (cur) {
 function rfdc (opts) {
   opts = opts || {}
 
+  const rename = opts.rename || ((key) => key)
+
   if (opts.circles) return rfdcCircles(opts)
   return opts.proto ? cloneProto : clone
 
@@ -35,9 +37,6 @@ function rfdc (opts) {
   }
 
   function clone (o) {
-
-    const rename = opts.rename ?? ((key)=> key);
-
     if (typeof o !== 'object' || o === null) return o
     if (o instanceof Date) return new Date(o)
     if (Array.isArray(o)) return cloneArray(o, clone)
@@ -46,6 +45,7 @@ function rfdc (opts) {
     var o2 = {}
     for (var k in o) {
       if (Object.hasOwnProperty.call(o, k) === false) continue
+      var k2 = rename(k)
       var cur = o[k]
       if (typeof cur !== 'object' || cur === null) {
         o2[k2] = cur
@@ -97,6 +97,8 @@ function rfdcCircles (opts) {
   var refs = []
   var refsNew = []
 
+  const rename = opts.rename || ((key) => key)
+
   return opts.proto ? cloneProto : clone
 
   function cloneArray (a, fn) {
@@ -104,7 +106,6 @@ function rfdcCircles (opts) {
     var a2 = new Array(keys.length)
     for (var i = 0; i < keys.length; i++) {
       var k = keys[i]
-      var k2 = rename(k)
       var cur = a[k]
       if (typeof cur !== 'object' || cur === null) {
         a2[k] = cur
